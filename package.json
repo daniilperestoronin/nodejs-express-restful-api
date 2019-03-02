@@ -1,0 +1,23 @@
+{
+  "name": "nodejs-express-restful-api",
+  "version": "0.0.1",
+  "description": "Simple Node.js restful api using express",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daniilperestoronin/nodejs-express-restful-api.git"
+  },
+  "author": "Daniil Perestoronin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/daniilperestoronin/nodejs-express-restful-api/issues"
+  },
+  "homepage": "https://github.com/daniilperestoronin/nodejs-express-restful-api#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
