@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/daniilperestoronin/nodejs-express-restful-api#readme",
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "mongodb": "^3.1.13"
   }
 }
