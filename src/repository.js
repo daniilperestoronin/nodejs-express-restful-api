@@ -4,72 +4,80 @@ const url = 'mongodb://localhost:27017/';
 const dbName = 'note';
 const dbCollection = 'notes';
 
+const client = new MongoClient(url);
+
 const noteRepository = {};
 
 // create
 noteRepository.createNote = function (note) {
-    MongoClient.connect(url, function (err, db) {
+    client.connect(function (err, clientConnect) {
         if (err) throw err;
-        const dbo = db.db(dbName);
-        dbo.collection(dbCollection).insertOne(note, function (err, res) {
+        const db = clientConnect.db(dbName);
+        db.collection(dbCollection).insertOne(note, function (err, res) {
             if (err) throw err;
-            console.log('note inserted: ' + note);
-            db.close();
+            console.log('note inserted: ' + JSON.stringify(note));
         });
+        clientConnect.close();
     });
 };
 
 // read all
 noteRepository.readAllNotes = function () {
-    MongoClient.connect(url, function (err, db) {
+    let res;
+    client.connect(function (err, clientConnect) {
         if (err) throw err;
-        const dbo = db.db(dbName);
-        let res;
-        dbo.collection(dbCollection).find({}).toArray(function (err, result) {
+        const db = clientConnect.db(dbName);
+        db.collection(dbCollection).find({}).toArray(function (err, result) {
             if (err) throw err;
-            db.close();
+            console.log(result);
             res = result;
         });
-        return res;
-    });
+        clientConnect.close();
+    }).finally(
+        client.close
+    );
+    return res;
 };
 
 //read by id
 noteRepository.readNote = function (id) {
-    MongoClient.connect(url, function (err, db) {
+    let res;
+    client.connect(function (err, clientConnect) {
         if (err) throw err;
-        const dbo = db.db(dbName);
-        dbo.collection(dbCollection).find({id: id}).toArray(function (err, result) {
+        const db = clientConnect.db(dbName);
+        db.collection(dbCollection).find({_id: id}).toArray(function (err, result) {
             if (err) throw err;
             console.log(result);
-            db.close();
+            res = result;
         });
+        clientConnect.close();
     });
+    return res;
 };
 
 // update
 noteRepository.updateNote = function (note) {
-    MongoClient.connect(url, function (err, db) {
+    client.connect(function (err, clientConnect) {
         if (err) throw err;
-        const dbo = db.db(dbName);
-        dbo.collection(dbCollection).updateOne({id: note.id}, {$set: note}, function (err, res) {
+        const db = clientConnect.db(dbName);
+        db.collection(dbCollection).updateOne({_id: note._id}, {$set: note}, function (err, result) {
             if (err) throw err;
-            console.log('1 document updated');
-            db.close();
+            console.log('document with _id: ' + note._id + 'updated');
         });
+        clientConnect.close();
     });
-}
+};
 
 // delete
 noteRepository.deleteNote = function (id) {
-    MongoClient.connect(url, function (err, db) {
+    client.connect(function (err, clientConnect) {
         if (err) throw err;
-        const dbo = db.db(dbName);
-        dbo.collection(dbCollection).deleteOne({id: id}, function (err, obj) {
+        const db = clientConnect.db(dbName);
+        db.collection(dbCollection).deleteOne({id: id}, function (err, result) {
             if (err) throw err;
-            console.log('1 document deleted');
-            db.close();
+            console.log('document with _id: ' + note._id + ' deleted');
         });
+        clientConnect.close();
     });
 };
 
